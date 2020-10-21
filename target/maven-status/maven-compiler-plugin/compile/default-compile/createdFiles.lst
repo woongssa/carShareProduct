@@ -1,0 +1,12 @@
+carshare\ProductRepository.class
+carshare\ProductController.class
+carshare\Ordered.class
+carshare\OrderCancelled.class
+carshare\ProductApplication.class
+carshare\ProductChanged.class
+carshare\config\kafka\KafkaProcessor.class
+carshare\AbstractEvent.class
+carshare\Product.class
+carshare\AbstractEvent$1.class
+carshare\PolicyHandler.class
+carshare\ProductRegistered.class
