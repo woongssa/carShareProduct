@@ -1,12 +1,21 @@
+env:
+  variables:
+    _PROJECT_NAME: "carshareproduct"
+    _ECR_NAME: "carshareproduct"
+    _NAMESPACE: "carshare"
+    _AWS_REGION: "ap-southeast-1"
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: product
+  name: $_PROJECT_NAME
+  namespace: $_NAMESPACE
   labels:
-    app: product
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: product
+    app: $_PROJECT_NAME
+  spec:
+    ports:
+      - port: 8080
+        targetPort: 8080
+    selector:
+      app: $_PROJECT_NAME
+    
