@@ -1,37 +1,57 @@
+env:
+  variables:
+    _PROJECT_NAME: "carshareproduct"
+    _ECR_NAME: "carshareproduct"
+    _NAMESPACE: "carshare"
+    _AWS_REGION: "ap-southeast-1"
+
 apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: product
-  labels:
-    app: product
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: product
-  template:
-    metadata:
-      labels:
-        app: product
-    spec:
-      containers:
-        - name: product
-          image: username/product:latest
-          ports:
-            - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 10
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 10
-          livenessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 120
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 5
+        kind: Deployment
+        metadata:
+          name: $_PROJECT_NAME
+          namespace: $_NAMESPACE
+          labels:
+            app: $_PROJECT_NAME
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: $_PROJECT_NAME
+          template:
+            metadata:
+              labels:
+                app: $_PROJECT_NAME
+            spec:
+              containers:
+                - name: $_PROJECT_NAME
+                  image: $AWS_ACCOUNT_ID.dkr.ecr.$_AWS_REGION.amazonaws.com/$_ECR_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+                  ports:
+                    - containerPort: 8080
+                  resources:
+                    limits:
+                      cpu: 500m
+                    requests:
+                      cpu: 200m
+                  env:
+                    - name: api.payment.url
+                      valueFrom:
+                        configMapKeyRef:
+                          name: my-config
+                          key: api.payment.url
+                  imagePullPolicy: Always
+                  readinessProbe:
+                    httpGet:
+                      path: /
+                      port: 8080
+                    initialDelaySeconds: 30
+                    timeoutSeconds: 2
+                    periodSeconds: 5
+                    failureThreshold: 10
+                  livenessProbe:
+                    httpGet:
+                      path: /
+                      port: 8080
+                    initialDelaySeconds: 120
+                    timeoutSeconds: 2
+                    periodSeconds: 5
+                    failureThreshold: 5   
