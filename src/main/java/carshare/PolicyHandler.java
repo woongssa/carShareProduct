@@ -29,7 +29,7 @@ public class PolicyHandler{
             if(optional.isPresent()) {
                 product = optional.get();
                 product.setId(ordered.getProductId());
-                product.setQty((product.getQty() != null ? product.getQty().intValue() - 1 : 0));
+                product.setQty((product.getQty() != null ? product.getQty().intValue() - ordered.getQty() : 0));
                 productRepository.save(product);
 
             }
@@ -44,7 +44,7 @@ public class PolicyHandler{
             if(optional.isPresent()) {
                 product = optional.get();
                 product.setId(orderCancelled.getProductId());
-                product.setQty(product.getQty() != null ? product.getQty().intValue() + 1 : 0);
+                product.setQty(product.getQty() != null ? product.getQty().intValue() + orderCancelled.getQty() : 0);
                 productRepository.save(product);
 
             }
